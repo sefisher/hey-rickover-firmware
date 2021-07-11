@@ -4,9 +4,7 @@ This folder contains a copy of Atomic14's DIY-Alexa Code for testing/playing wit
 
 The original repository is: https://github.com/atomic14/diy-alexa
 
-NOTE:  config.h is missing from the src folder since it contains private data.  It is needed for compile.
-
-=====================================================================================
+## NOTE:  config.h is missing from the src folder since it contains private data.  It is needed for compile.
 
 We are using Platform.io to build the firmware.
 
