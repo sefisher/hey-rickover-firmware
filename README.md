@@ -1,6 +1,10 @@
 # DIY Alexa ESP32 Firmware
 
-This folder contains the firmware for running DIY Alexa on the ESP32.
+This folder contains a copy of Atomic14's DIY-Alexa Code for testing/playing with it.
+
+The original repository is: https://github.com/atomic14/diy-alexa
+
+=============
 
 We are using Platform.io to build the firmware.
 
