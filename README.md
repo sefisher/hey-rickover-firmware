@@ -10,7 +10,7 @@ The original repository is: https://github.com/atomic14/diy-alexa
 
 We are using Platform.io to build the firmware.
 
-If you're having problems detecting the wakeword `Marvin` then you can try lowering the detection threshold:
+If you're having problems detecting the wakeword `Rickover` then you can try lowering the detection threshold:
 
 `/src/state_machine/DetectWakeWordState.cpp` line 59.
 
