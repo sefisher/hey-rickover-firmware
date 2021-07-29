@@ -4,9 +4,9 @@ This folder contains a copy of Atomic14's DIY-Alexa Code for testing/playing wit
 
 The original repository is: https://github.com/atomic14/diy-alexa
 
-## NOTE:  config.h would contain private data.  
-**But it is needed for compile. So I substitue in vscode calls to environment variables that store the data. I suggest using the same environment vairable names to allow you to use the code as is.**
-**Also you need to set up a witai application and get a client access token - also stored in an environment vairable.**
+## NOTE:  config.h would contain private data. I instead added secrets.h for that data.  You can either update the variables directly in config.h or make your own secrets.h file. 
+
+**Also you need to set up a witai application and get a client access token - also stored in secrets.h**
 
 We are using Platform.io to build the firmware.
 
