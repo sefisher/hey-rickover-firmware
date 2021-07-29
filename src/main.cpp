@@ -75,14 +75,19 @@ void setup()
 {
   Serial.begin(115200);
   delay(1000);
-  Serial.println("Starting up");
+  Serial.println("=================Starting up================");
+  Serial.println(WIFI_SSID);
+  Serial.println(WIFI_PSWD);
+  Serial.println("===========================================");
   // start up wifi
   // launch WiFi
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PSWD);
   if (WiFi.waitForConnectResult() != WL_CONNECTED)
   {
-    Serial.println("Connection Failed! Rebooting...");
+    Serial.println("Connection Failed! WIFI_SSID: ");
+
+    Serial.println("Rebooting...");
     delay(5000);
     ESP.restart();
   }
