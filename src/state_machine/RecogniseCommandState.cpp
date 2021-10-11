@@ -6,7 +6,7 @@
 #include "IndicatorLight.h"
 #include "Speaker.h"
 #include "IntentProcessor.h"
-#include "WitAiChunkedUploader.h"
+#include "ChunkedUploader.h"
 #include "../config.h"
 #include <string.h>
 
@@ -38,7 +38,7 @@ void RecogniseCommandState::enterState()
     uint32_t free_ram = esp_get_free_heap_size();
     Serial.printf("Free ram before connection %d\n", free_ram);
 
-    m_speech_recogniser = new WitAiChunkedUploader(COMMAND_RECOGNITION_ACCESS_KEY);
+    m_speech_recogniser = new ChunkedUploader(COMMAND_RECOGNITION_ACCESS_KEY);
 
     Serial.println("Ready for action");
 
@@ -97,6 +97,9 @@ bool RecogniseCommandState::run()
             // all done, move to next state
             Serial.println("3 seconds has elapsed - finishing recognition request");
             // final new line to finish off the request
+
+            /* TESTING ----
+            
             Intent intent = m_speech_recogniser->getResults();
             IntentResult intentResult = m_intent_processor->processIntent(intent);
             switch (intentResult)
@@ -111,8 +114,11 @@ bool RecogniseCommandState::run()
                 // nothing to do
                 break;
             }
+            //TESTING -----*/
+
             // indicate that we are done
             m_indicator_light->setState(OFF);
+
             return true;
         }
     }

@@ -22,10 +22,10 @@ void DetectWakeWordState::enterState()
 {
     // Create our neural network
     m_nn = new NeuralNetwork();
-    Serial.println("Created Neral Net");
+    Serial.println("Created Neural Net");
     // create our audio processor
     m_audio_processor = new AudioProcessor(AUDIO_LENGTH, WINDOW_SIZE, STEP_SIZE, POOLING_SIZE);
-    Serial.println("Created audio processor");
+    Serial.println("Created Audio Processor");
 
     m_number_of_detections = 0;
 }
@@ -56,14 +56,14 @@ bool DetectWakeWordState::run()
         Serial.printf("Average detection time %.fms\n", m_average_detect_time);
     }
     // use quite a high threshold to prevent false positives
-    if (output > 0.90)
+    if (output > 0.93)
     {
         m_number_of_detections++;
         if (m_number_of_detections > 1)
         {
             m_number_of_detections = 0;
             // detected the wake word in several runs, move to the next state
-            Serial.printf("P(%.2f): Here I am, brain the size of a planet...\n", output);
+            Serial.printf("P(%.2f): Detected Wake Word --> Recording Audio...\n", output);
             return true;
         }
     }

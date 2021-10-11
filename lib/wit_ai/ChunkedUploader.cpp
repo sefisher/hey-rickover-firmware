@@ -1,9 +1,19 @@
-#include "WitAiChunkedUploader.h"
-#include "WiFiClientSecure.h"
+#include "config.h"
+#include "ChunkedUploader.h"
 #include <ArduinoJson.h>
 
-WitAiChunkedUploader::WitAiChunkedUploader(const char *access_key)
+#ifdef USE_WITAI
+#include "WiFiClientSecure.h"
+#endif
+
+#ifdef USE_UDP_STREAM
+#include <WiFiUdp.h>
+#include <WiFi.h>
+#endif
+
+ChunkedUploader::ChunkedUploader(const char *access_key)
 {
+#ifdef USE_WITAI
     m_wifi_client = new WiFiClientSecure();
     m_wifi_client->setInsecure();
     m_wifi_client->connect("api.wit.ai", 443);
@@ -15,30 +25,55 @@ WitAiChunkedUploader::WitAiChunkedUploader(const char *access_key)
     m_wifi_client->println("content-type: audio/raw; encoding=signed-integer; bits=16; rate=16000; endian=little");
     m_wifi_client->println("transfer-encoding: chunked");
     m_wifi_client->println();
+#endif
+#ifdef USE_UDP_STREAM
+    m_wifi_client = new WiFiUDP();
+#endif
 }
 
-bool WitAiChunkedUploader::connected()
+bool ChunkedUploader::connected()
 {
+#ifdef USE_WITAI
     return m_wifi_client->connected();
+#endif
+#ifdef USE_UDP_STREAM
+    return true;
+#endif
 }
 
-void WitAiChunkedUploader::startChunk(int size_in_bytes)
+void ChunkedUploader::startChunk(int size_in_bytes)
 {
+#ifdef USE_WITAI
     m_wifi_client->printf("%X\r\n", size_in_bytes);
+#endif
+#ifdef USE_UDP_STREAM
+    m_wifi_client->beginPacket(SERVER_IP, SERVER_PORT);
+#endif
 }
 
-void WitAiChunkedUploader::sendChunkData(const uint8_t *data, int size_in_bytes)
+void ChunkedUploader::sendChunkData(const uint8_t *data, int size_in_bytes)
 {
+#ifdef USE_WITAI
     m_wifi_client->write(data, size_in_bytes);
+#endif
+#ifdef USE_UDP_STREAM
+    m_wifi_client->write(data, size_in_bytes);
+#endif
 }
 
-void WitAiChunkedUploader::finishChunk()
+void ChunkedUploader::finishChunk()
 {
+#ifdef USE_WITAI
     m_wifi_client->print("\r\n");
+#endif
+#ifdef USE_UDP_STREAM
+    m_wifi_client->endPacket();
+#endif
 }
 
-Intent WitAiChunkedUploader::getResults()
+Intent ChunkedUploader::getResults()
 {
+#ifdef USE_WITAI
     // finish the chunked request by sending a zero length chunk
     m_wifi_client->print("0\r\n");
     m_wifi_client->print("\r\n");
@@ -99,9 +134,18 @@ Intent WitAiChunkedUploader::getResults()
             .trait_confidence = trait_confidence};
     }
     return Intent{};
+#endif
+#ifdef USE_UDP_STREAM
+    return Intent{.text = "UDP processing - no intent response."};
+#endif
 }
 
-WitAiChunkedUploader::~WitAiChunkedUploader()
+ChunkedUploader::~ChunkedUploader()
 {
+#ifdef USE_WITAI
     delete m_wifi_client;
+#endif
+#ifdef USE_UDP_STREAM
+    delete m_wifi_client;
+#endif
 }

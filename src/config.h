@@ -1,6 +1,6 @@
 
-//this file contains the senstive parameters below.  you can  add your own secrets.h
-//or comment this out and enter them directly below.
+// The secrets.h file contains the senstive parameters below.  It is excluded from Git. You can add your own secrets.h
+// file or comment this line out and enter the parameters directly below.
 #include "secrets.h"
 
 // WiFi credentials
@@ -11,10 +11,28 @@
 #define WIFI_PSWD "PUT YOUR PASS"
 #endif
 
-// Command recognition settings
+//AUDIO PROCESSING SETTINGS ----------------------------------------------------------
+
+//Uncomment the streamer/intent processor you want to use
+//Also use Secrets.h to store the relavent information (port, server)
+//#define USE_WITAI
+#define USE_UDP_STREAM
+
+// Audio command recognition settings for Wit AI - normally set these in secrets.h
 #ifndef COMMAND_RECOGNITION_ACCESS_KEY
 #define COMMAND_RECOGNITION_ACCESS_KEY "PUT YOUR ACCESS KEY"
 #endif
+
+//Audio command processing setting for UDP Streaming - normally set these in secrets.h
+//FOR UDP STREAMEING AUDIO
+#ifndef SERVER_IP
+#define SERVER_IP "PUT YOUR AUDIO PROCESSING MACHINE IP HERE"
+#endif
+#ifndef SERVER_PORT
+#define SERVER_PORT 4444 //set the port number your machine is listening to UDP broadcasts on
+#endif
+
+//AUDIO RECORDING AND PLAYBACK SETTINGS ------------------------------------------------
 
 // are you using an I2S microphone - comment this out if you want to use an analog mic and ADC input
 #define USE_I2S_MIC_INPUT
