@@ -1,6 +1,5 @@
 #include "config.h"
 #include "ChunkedUploader.h"
-#include <ArduinoJson.h>
 
 #ifdef USE_WITAI
 #include "WiFiClientSecure.h"
@@ -8,8 +7,9 @@
 
 #ifdef USE_UDP_STREAM
 #include <WiFiUdp.h>
-#include <WiFi.h>
 #endif
+
+//TODO - fix to remove need for access_key
 
 ChunkedUploader::ChunkedUploader(const char *access_key)
 {
@@ -28,52 +28,66 @@ ChunkedUploader::ChunkedUploader(const char *access_key)
 #endif
 #ifdef USE_UDP_STREAM
     m_wifi_client = new WiFiUDP();
+    m_wifi_client->begin(SERVER_PORT);
 #endif
+    //Serial.begin(115200);
 }
 
 bool ChunkedUploader::connected()
 {
 #ifdef USE_WITAI
+    Serial.printf("WITAI - Testing connection.");
     return m_wifi_client->connected();
+
 #endif
 #ifdef USE_UDP_STREAM
     return true;
 #endif
+    return true;
 }
 
 void ChunkedUploader::startChunk(int size_in_bytes)
 {
 #ifdef USE_WITAI
+    Serial.printf("WITAI - Start Chunk - ");
     m_wifi_client->printf("%X\r\n", size_in_bytes);
 #endif
 #ifdef USE_UDP_STREAM
-    m_wifi_client->beginPacket(SERVER_IP, SERVER_PORT);
+    //m_wifi_client->beginPacket(SERVER_IP, SERVER_PORT);
+    //Serial.println("Started UDP.");
 #endif
 }
 
 void ChunkedUploader::sendChunkData(const uint8_t *data, int size_in_bytes)
 {
 #ifdef USE_WITAI
+    Serial.printf(" data - ");
     m_wifi_client->write(data, size_in_bytes);
 #endif
 #ifdef USE_UDP_STREAM
+    m_wifi_client->beginPacket(SERVER_IP, SERVER_PORT);
     m_wifi_client->write(data, size_in_bytes);
+    m_wifi_client->endPacket();
+    //Serial.print(".");
 #endif
 }
 
 void ChunkedUploader::finishChunk()
 {
 #ifdef USE_WITAI
+    Serial.printf(" ending.\r\n");
     m_wifi_client->print("\r\n");
 #endif
 #ifdef USE_UDP_STREAM
-    m_wifi_client->endPacket();
+    //m_wifi_client->endPacket();
+    //Serial.println("Ended UDP.");
 #endif
 }
 
 Intent ChunkedUploader::getResults()
 {
 #ifdef USE_WITAI
+    Serial.printf("WITAI - get results.\r\n ");
     // finish the chunked request by sending a zero length chunk
     m_wifi_client->print("0\r\n");
     m_wifi_client->print("\r\n");
@@ -133,11 +147,12 @@ Intent ChunkedUploader::getResults()
             .trait_value = (trait_value ? trait_value : ""),
             .trait_confidence = trait_confidence};
     }
-    return Intent{};
 #endif
+
 #ifdef USE_UDP_STREAM
-    return Intent{.text = "UDP processing - no intent response."};
+    return Intent{.text = "UDP"};
 #endif
+    return Intent{};
 }
 
 ChunkedUploader::~ChunkedUploader()

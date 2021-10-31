@@ -39,7 +39,7 @@ void RecogniseCommandState::enterState()
     Serial.printf("Free ram before connection %d\n", free_ram);
 
     m_speech_recogniser = new ChunkedUploader(COMMAND_RECOGNITION_ACCESS_KEY);
-
+    Serial.println(m_speech_recogniser->connected() ? "Ready" : "Not Ready");
     Serial.println("Ready for action");
 
     free_ram = esp_get_free_heap_size();
@@ -95,13 +95,15 @@ bool RecogniseCommandState::run()
             m_indicator_light->setState(PULSING);
 
             // all done, move to next state
-            Serial.println("3 seconds has elapsed - finishing recognition request");
+            Serial.println("3 seconds has elapsed - finishing recognition request....");
             // final new line to finish off the request
 
-            /* TESTING ----
-            
             Intent intent = m_speech_recogniser->getResults();
+            Serial.println(intent.text.c_str());
+
+            ///* TESTING ----
             IntentResult intentResult = m_intent_processor->processIntent(intent);
+
             switch (intentResult)
             {
             case SUCCESS:

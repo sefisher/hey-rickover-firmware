@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 #include <string>
+#include <ArduinoJson.h>
+#include <Arduino.h>
+#include <WiFi.h>
 
 #ifdef USE_WITAI
 class WiFiClientSecure;

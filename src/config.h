@@ -15,8 +15,8 @@
 
 //Uncomment the streamer/intent processor you want to use
 //Also use Secrets.h to store the relavent information (port, server)
-//#define USE_WITAI
-#define USE_UDP_STREAM
+#define USE_WITAI
+//#define USE_UDP_STREAM
 
 // Audio command recognition settings for Wit AI - normally set these in secrets.h
 #ifndef COMMAND_RECOGNITION_ACCESS_KEY
