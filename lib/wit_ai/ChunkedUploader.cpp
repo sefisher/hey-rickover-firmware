@@ -1,5 +1,6 @@
 #include "config.h"
 #include "ChunkedUploader.h"
+#include <ArduinoJson.h>
 
 #ifdef USE_WITAI
 #include "WiFiClientSecure.h"
