@@ -1,3 +1,5 @@
+#ifndef config_loaded
+#define config_loaded
 
 // The secrets.h file contains the senstive parameters below.  It is excluded from Git. You can add your own secrets.h
 // file or comment this line out and enter the parameters directly below.
@@ -53,3 +55,5 @@
 #define I2S_SPEAKER_SERIAL_CLOCK GPIO_NUM_19
 #define I2S_SPEAKER_LEFT_RIGHT_CLOCK GPIO_NUM_27
 #define I2S_SPEAKER_SERIAL_DATA GPIO_NUM_18
+
+#endif //config_loaded

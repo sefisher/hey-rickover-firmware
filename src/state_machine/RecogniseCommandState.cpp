@@ -97,13 +97,13 @@ bool RecogniseCommandState::run()
             // all done, move to next state
             Serial.println("3 seconds has elapsed - finishing recognition request....");
             // final new line to finish off the request
-
+            Serial.println("going to intent");
             Intent intent = m_speech_recogniser->getResults();
-            Serial.println(intent.text.c_str());
+            Serial.println("got intent");
 
             ///* TESTING ----
             IntentResult intentResult = m_intent_processor->processIntent(intent);
-
+            Serial.println("processed intent");
             switch (intentResult)
             {
             case SUCCESS:
@@ -116,6 +116,7 @@ bool RecogniseCommandState::run()
                 // nothing to do
                 break;
             }
+            Serial.println("switched intent");
             //TESTING -----*/
 
             // indicate that we are done

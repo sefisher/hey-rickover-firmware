@@ -1,6 +1,5 @@
 #include "config.h"
 #include "ChunkedUploader.h"
-#include <ArduinoJson.h>
 
 #ifdef USE_WITAI
 #include "WiFiClientSecure.h"
@@ -15,9 +14,12 @@
 ChunkedUploader::ChunkedUploader(const char *access_key)
 {
 #ifdef USE_WITAI
+    Serial.printf("Connecting...");
     m_wifi_client = new WiFiClientSecure();
+    Serial.println(m_wifi_client->connected());
     m_wifi_client->setInsecure();
     m_wifi_client->connect("api.wit.ai", 443);
+    Serial.println(m_wifi_client->connected());
     char authorization_header[100];
     snprintf(authorization_header, 100, "authorization: Bearer %s", access_key);
     m_wifi_client->println("POST /speech?v=20200927 HTTP/1.1");
